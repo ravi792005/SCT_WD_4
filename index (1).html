@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do Web App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <div class="app">
+    <h1>To-Do List</h1>
+    <form id="task-form">
+      <input type="text" id="task-title" placeholder="Task title" required />
+      <select id="task-category" required>
+        <option value="" disabled selected>Select Category</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Others">Others</option>
+      </select>
+      <input type="date" id="task-date" required />
+      <input type="time" id="task-time" required />
+      <button type="submit">Add Task</button>
+    </form>
+    <ul id="task-list"></ul>
+  </div>
+
+  <script src="script.js"></script>
+ <script>
+  const canvas = document.getElementById("stars");
+  const ctx = canvas.getContext("2d");
+
+  let symbols = ["❄", "✨", "💫", "🌟", "🟣", "🔵", "🔴"];
+  let particles = [];
+  const count = 70;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      speed: Math.random() * 1 + 0.3,
+      symbol: symbols[Math.floor(Math.random() * symbols.length)],
+      fontSize: Math.random() * 10 + 8,
+      color: `hsl(${Math.random() * 360}, 100%, 70%)`
+    });
+  }
+
+  function animateSymbols() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      ctx.fillStyle = p.color;
+      ctx.font = `${p.fontSize}px Arial`;
+      ctx.fillText(p.symbol, p.x, p.y);
+      p.y += p.speed;
+      if (p.y > canvas.height) {
+        p.y = 0;
+        p.x = Math.random() * canvas.width;
+        p.symbol = symbols[Math.floor(Math.random() * symbols.length)];
+        p.color = `hsl(${Math.random() * 360}, 100%, 70%)`;
+      }
+    }
+    requestAnimationFrame(animateSymbols);
+  }
+
+  animateSymbols();
+</script>
+
+
+</body>
+
+</html>
